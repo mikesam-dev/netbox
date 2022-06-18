@@ -50,7 +50,7 @@ class WirelessLANTable(NetBoxTable):
         model = WirelessLAN
         fields = (
             'pk', 'ssid', 'group', 'description', 'vlan', 'interface_count', 'auth_type', 'auth_cipher', 'auth_psk',
-            'tags', 'created', 'last_updated',
+            'tags', 'created', 'last_updated', 'tenant',
         )
         default_columns = ('pk', 'ssid', 'group', 'description', 'vlan', 'auth_type', 'interface_count')
 

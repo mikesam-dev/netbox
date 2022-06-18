@@ -80,13 +80,14 @@ class WirelessLANForm(NetBoxModelForm):
         ('Wireless LAN', ('ssid', 'group', 'description', 'tags')),
         ('VLAN', ('region', 'site_group', 'site', 'vlan_group', 'vlan',)),
         ('Authentication', ('auth_type', 'auth_cipher', 'auth_psk')),
+        ('Tenancy', ('tenant', )),
     )
 
     class Meta:
         model = WirelessLAN
         fields = [
             'ssid', 'group', 'description', 'region', 'site_group', 'site', 'vlan_group', 'vlan', 'auth_type',
-            'auth_cipher', 'auth_psk', 'tags',
+            'auth_cipher', 'auth_psk', 'tags', 'tenant'
         ]
         widgets = {
             'auth_type': StaticSelect,
