@@ -31,7 +31,7 @@ class WirelessLANFilterForm(NetBoxModelFilterSetForm):
         (None, ('q', 'tag')),
         ('Attributes', ('ssid', 'group_id',)),
         ('Authentication', ('auth_type', 'auth_cipher', 'auth_psk')),
-        ('Tenant', ('tenant_group', 'tenant')),
+        ('Tenant', ('tenant_group_id', 'tenant_id')),
     )
     ssid = forms.CharField(
         required=False,
@@ -57,15 +57,15 @@ class WirelessLANFilterForm(NetBoxModelFilterSetForm):
         required=False
     )
     tag = TagFilterField(model)
-    tenant_group = DynamicModelMultipleChoiceField(
+    tenant_group_id = DynamicModelMultipleChoiceField(
         queryset=TenantGroup.objects.all(),
         required=False,
         label=_('Tenant groups')
     )
-    tenant = DynamicModelMultipleChoiceField(
+    tenant_id = DynamicModelMultipleChoiceField(
         queryset=Tenant.objects.all(),
         required=False,
-        label=_('Tenant')
+        label=_('Tenant name')
     )
 
 
