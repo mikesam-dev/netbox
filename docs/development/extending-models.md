@@ -41,7 +41,7 @@ Extend the model's API serializer in `<app>.api.serializers` to include the new 
 
 ## 5. Add fields to forms
 
-Extend any forms to include the new field(s) as appropriate. These are found under the `forms/` directory within each app. Common forms include:
+Extend any forms to include the new field(s) as appropriate. These are found under the `<app>/forms/` directory within each app. Common forms include:
 
 * **Credit/edit** - Manipulating a single object
 * **Bulk edit** - Performing a change on many objects at once
@@ -54,11 +54,12 @@ If the new field should be filterable, add it to the `FilterSet` for the model. 
 
 ## 7. Add column to object table
 
-If the new field will be included in the object list view, add a column to the model's table. For simple fields, adding the field name to `Meta.fields` will be sufficient. More complex fields may require declaring a custom column. Also add the field name to `default_columns` if the column should be present in the table by default.
+If the new field will be included in the object list view, add a column to the model's table located in the `<app>/tables/` directory. For simple fields, adding the field name to `Meta.fields` will be sufficient. More complex fields may require declaring a custom column. Also add the field name to `default_columns` if the column should be present in the table by default.
 
 ## 8. Update the UI templates
 
-Edit the object's view template to display the new field. There may also be a custom add/edit form template that needs to be updated.
+Edit the object's view template to display the new field. There may also be a custom add/edit form template that needs to be updated. These are found under the `netbox/templates/` directory.
+
 
 ## 9. Create/extend test cases
 
