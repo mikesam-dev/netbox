@@ -2,6 +2,7 @@ from django import forms
 
 from dcim.choices import LinkStatusChoices
 from ipam.models import VLAN
+from tenancy.models import Tenant
 from netbox.forms import NetBoxModelBulkEditForm
 from utilities.forms import add_blank_choice, DynamicModelChoiceField
 from wireless.choices import *
@@ -62,14 +63,20 @@ class WirelessLANBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
         label='Pre-shared key'
     )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False,
+        label='Tenant'
+    )
 
     model = WirelessLAN
     fieldsets = (
         (None, ('group', 'vlan', 'ssid', 'description')),
         ('Authentication', ('auth_type', 'auth_cipher', 'auth_psk')),
+        ('Tenant', ('tenant',)),
     )
     nullable_fields = (
-        'ssid', 'group', 'vlan', 'description', 'auth_type', 'auth_cipher', 'auth_psk',
+        'ssid', 'group', 'vlan', 'description', 'auth_type', 'auth_cipher', 'auth_psk', 'tenant',
     )
 
 
