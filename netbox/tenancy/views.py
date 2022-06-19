@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from circuits.models import Circuit
 from dcim.models import Cable, Device, Location, Rack, RackReservation, Site
 from ipam.models import Aggregate, IPAddress, Prefix, VLAN, VRF, ASN
+from wireless.models import WirelessLAN
 from netbox.views import generic
 from utilities.utils import count_related
 from virtualization.models import VirtualMachine, Cluster
@@ -113,6 +114,7 @@ class TenantView(generic.ObjectView):
             'cluster_count': Cluster.objects.restrict(request.user, 'view').filter(tenant=instance).count(),
             'cable_count': Cable.objects.restrict(request.user, 'view').filter(tenant=instance).count(),
             'asn_count': ASN.objects.restrict(request.user, 'view').filter(tenant=instance).count(),
+            'wlan_count': WirelessLAN.objects.restrict(request.user, 'view').filter(tenant=instance).count(),
         }
 
         return {
