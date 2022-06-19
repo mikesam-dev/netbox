@@ -54,7 +54,7 @@ class WirelessLANFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = WirelessLAN
-        fields = ['id', 'ssid', 'auth_psk', 'description']
+        fields = ['id', 'ssid', 'auth_psk', 'description', 'tenant']
 
     def search(self, queryset, name, value):
         if not value.strip():
