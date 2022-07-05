@@ -2,6 +2,7 @@ from django.urls import reverse
 
 from wireless.choices import *
 from wireless.models import *
+from tenancy.models import Tenant
 from dcim.choices import InterfaceTypeChoices
 from dcim.models import Interface
 from utilities.testing import APITestCase, APIViewTestCases, create_test_device
@@ -52,6 +53,12 @@ class WirelessLANTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
 
+        tenants = (
+            Tenant(name='Tenant 1', slug='tenant-1'),
+            Tenant(name='Tenant 2', slug='tenant-2'),
+        )
+        Tenant.objects.bulk_create(tenants)
+
         groups = (
             WirelessLANGroup(name='Group 1', slug='group-1'),
             WirelessLANGroup(name='Group 2', slug='group-2'),
@@ -62,8 +69,8 @@ class WirelessLANTest(APIViewTestCases.APIViewTestCase):
 
         wireless_lans = (
             WirelessLAN(ssid='WLAN1'),
-            WirelessLAN(ssid='WLAN2'),
-            WirelessLAN(ssid='WLAN3'),
+            WirelessLAN(ssid='WLAN2', tenant=tenants[0]),
+            WirelessLAN(ssid='WLAN3', tenant=tenants[1]),
         )
         WirelessLAN.objects.bulk_create(wireless_lans)
 

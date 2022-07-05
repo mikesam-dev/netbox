@@ -3,6 +3,7 @@ from django.test import TestCase
 from dcim.choices import InterfaceTypeChoices, LinkStatusChoices
 from dcim.models import Interface
 from ipam.models import VLAN
+from tenancy.models import Tenant
 from wireless.choices import *
 from wireless.filtersets import *
 from wireless.models import *
@@ -66,6 +67,12 @@ class WirelessLANTestCase(TestCase, ChangeLoggedFilterSetTests):
     @classmethod
     def setUpTestData(cls):
 
+        tenants = (
+            Tenant(name='Tenant 1', slug='tenant-1'),
+            Tenant(name='Tenant 2', slug='tenant-2'),
+        )
+        Tenant.objects.bulk_create(tenants)
+
         groups = (
             WirelessLANGroup(name='Wireless LAN Group 1', slug='wireless-lan-group-1'),
             WirelessLANGroup(name='Wireless LAN Group 2', slug='wireless-lan-group-2'),
@@ -85,6 +92,9 @@ class WirelessLANTestCase(TestCase, ChangeLoggedFilterSetTests):
             WirelessLAN(ssid='WLAN1', group=groups[0], vlan=vlans[0], auth_type=WirelessAuthTypeChoices.TYPE_OPEN, auth_cipher=WirelessAuthCipherChoices.CIPHER_AUTO, auth_psk='PSK1'),
             WirelessLAN(ssid='WLAN2', group=groups[1], vlan=vlans[1], auth_type=WirelessAuthTypeChoices.TYPE_WEP, auth_cipher=WirelessAuthCipherChoices.CIPHER_TKIP, auth_psk='PSK2'),
             WirelessLAN(ssid='WLAN3', group=groups[2], vlan=vlans[2], auth_type=WirelessAuthTypeChoices.TYPE_WPA_PERSONAL, auth_cipher=WirelessAuthCipherChoices.CIPHER_AES, auth_psk='PSK3'),
+            WirelessLAN(ssid='WLAN4', tenant=tenants[0]),
+            WirelessLAN(ssid='WLAN5', tenant=tenants[1]),
+            WirelessLAN(ssid='WLAN6', tenant=tenants[1]),
         )
         WirelessLAN.objects.bulk_create(wireless_lans)
 
@@ -116,6 +126,20 @@ class WirelessLANTestCase(TestCase, ChangeLoggedFilterSetTests):
         params = {'auth_psk': ['PSK1', 'PSK2']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
+    def test_tenant_1(self):
+        tenants = Tenant.objects.all()
+        params = {'tenant_id': [tenants[0].pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+    def test_tenant_2(self):
+        tenants = Tenant.objects.all()
+        params = {'tenant_id': [tenants[1].pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_tenants(self):
+        tenants = Tenant.objects.all()
+        params = {'tenant_id': [tenants[0].pk, tenants[1].pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 3)
 
 class WirelessLinkTestCase(TestCase, ChangeLoggedFilterSetTests):
     queryset = WirelessLink.objects.all()

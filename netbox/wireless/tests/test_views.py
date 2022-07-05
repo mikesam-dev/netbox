@@ -2,6 +2,7 @@ from wireless.choices import *
 from wireless.models import *
 from dcim.choices import InterfaceTypeChoices, LinkStatusChoices
 from dcim.models import Interface
+from tenancy.models import Tenant
 from utilities.testing import ViewTestCases, create_tags, create_test_device
 
 
@@ -47,6 +48,12 @@ class WirelessLANTestCase(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
 
+        tenants = (
+            Tenant(name='Tenant 1', slug='tenant-1'),
+            Tenant(name='Tenant 2', slug='tenant-2'),
+        )
+        Tenant.objects.bulk_create(tenants)
+
         groups = (
             WirelessLANGroup(name='Wireless LAN Group 1', slug='wireless-lan-group-1'),
             WirelessLANGroup(name='Wireless LAN Group 2', slug='wireless-lan-group-2'),
@@ -69,10 +76,10 @@ class WirelessLANTestCase(ViewTestCases.PrimaryObjectViewTestCase):
         }
 
         cls.csv_data = (
-            "group,ssid",
-            "Wireless LAN Group 2,WLAN4",
-            "Wireless LAN Group 2,WLAN5",
-            "Wireless LAN Group 2,WLAN6",
+            "group,ssid,tenant",
+            "Wireless LAN Group 2,WLAN4,Tenant 1",
+            "Wireless LAN Group 2,WLAN5,Tenant 2",
+            "Wireless LAN Group 2,WLAN6,",
         )
 
         cls.bulk_edit_data = {

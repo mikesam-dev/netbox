@@ -3,6 +3,7 @@ from django.db.models import Q
 
 from dcim.choices import LinkStatusChoices
 from ipam.models import VLAN
+from tenancy.models import Tenant
 from netbox.filtersets import OrganizationalModelFilterSet, NetBoxModelFilterSet
 from tenancy.filtersets import TenancyFilterSet
 from utilities.filters import MultiValueNumberFilter, TreeNodeMultipleChoiceFilter
@@ -51,6 +52,9 @@ class WirelessLANFilterSet(NetBoxModelFilterSet, TenancyFilterSet):
     )
     auth_cipher = django_filters.MultipleChoiceFilter(
         choices=WirelessAuthCipherChoices
+    )
+    tenant_id = django_filters.ModelMultipleChoiceFilter(
+        queryset=Tenant.objects.all()
     )
 
     class Meta:
