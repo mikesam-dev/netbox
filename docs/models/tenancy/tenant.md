@@ -10,6 +10,7 @@ A tenant represents a discrete grouping of resources used for administrative pur
 * Prefixes
 * IP addresses
 * VLANs
+* WLANs
 * Circuits
 * Clusters
 * Virtual machines
